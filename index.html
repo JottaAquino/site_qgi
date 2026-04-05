@@ -161,6 +161,7 @@
         }
         .hero-glow-1 { top: -200px; right: -100px; background: #4a90d9; }
         .hero-glow-2 { bottom: -200px; left: -100px; background: #7c3aed; opacity: 0.08; }
+        .hero-glow-3 { top: 50%; left: 50%; transform: translate(-50%,-50%); width: 400px; height: 400px; background: radial-gradient(circle, rgba(74,144,217,0.08) 0%, transparent 70%); }
 
         .hero-content {
             max-width: 800px; text-align: center;
@@ -384,6 +385,125 @@
             padding-top: 2rem; font-size: 0.75rem;
         }
 
+        /* ===== VISUAL ENHANCEMENTS ===== */
+
+        /* Subtle gradient dividers between sections */
+        .page-section::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            margin: 0 auto;
+            opacity: 0.2;
+            position: relative;
+            bottom: -5rem;
+        }
+
+        /* Accent line on section labels */
+        .section-label {
+            position: relative;
+            padding-left: 1.2rem;
+        }
+        .section-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            opacity: 0.5;
+        }
+
+        /* Hover glow on research cards */
+        .research-card:hover .research-icon {
+            background: rgba(26,58,92,0.12);
+            box-shadow: 0 0 20px rgba(26,58,92,0.08);
+        }
+
+        /* Subtle gradient on principle cards hover */
+        .principle-card:hover {
+            background: linear-gradient(135deg, var(--color-surface) 0%, rgba(26,58,92,0.02) 100%);
+        }
+
+        /* Better hero label styling */
+        .hero-label {
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.03);
+        }
+
+        /* Smooth animated gradient on hero background */
+        .hero {
+            background-size: 200% 200%;
+            animation: gradientShift 20s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Better button hover states */
+        .btn-accent {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-accent::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+        .btn-accent:hover::after { left: 100%; }
+
+        /* Timeline dots pulse */
+        .timeline-item.active::before {
+            box-shadow: 0 0 0 4px rgba(26,58,92,0.15);
+        }
+
+        /* Governance sidebar subtle shadow */
+        .governance-sidebar {
+            box-shadow: 0 8px 40px rgba(0,0,0,0.04);
+        }
+
+        /* Footer brand subtle glow */
+        .footer-brand .logo-text {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* CTA section subtle pattern */
+        .cta-section {
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(74,144,217,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(124,58,237,0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Pub notice icon animation */
+        .pub-notice svg {
+            transition: var(--transition);
+        }
+        .pub-notice:hover svg {
+            opacity: 0.6;
+            transform: translateY(-2px);
+        }
+
         /* Animations */
         @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
         .reveal {
@@ -472,6 +592,7 @@
 <section class="hero" id="home">
     <div class="hero-glow hero-glow-1"></div>
     <div class="hero-glow hero-glow-2"></div>
+    <div class="hero-glow hero-glow-3"></div>
     <div class="hero-content">
         <div class="hero-label">Instituto independente de pesquisa científica</div>
         <h1>Investigação científica nas fronteiras da informação, gravidade e sistemas complexos</h1>
