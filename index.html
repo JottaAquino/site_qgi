@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QGI Quantum Systems — Scientific Research Institute</title>
+    <meta name="description" content="QGI Quantum Systems — Instituto independente de pesquisa científica dedicado à investigação em ciência fundamental, informação e sistemas complexos.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --color-bg: #fafaf8;
+            --color-surface: #ffffff;
+            --color-dark: #0a0f1a;
+            --color-text: #1c1f26;
+            --color-text-secondary: #5a6072;
+            --color-text-light: #8b90a0;
+            --color-accent: #1a3a5c;
+            --color-accent-light: #2a5a8c;
+            --color-border: #e8e8e4;
+            --color-border-light: #f0f0ec;
+            --font-serif: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --max-width: 1140px;
+            --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--color-border);
+            transition: var(--transition);
+        }
+        .navbar.scrolled { box-shadow: 0 1px 12px rgba(0,0,0,0.04); }
+
+        .navbar-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+        }
+
+        .logo { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-mark {
+            width: 36px; height: 36px;
+            border: 2px solid var(--color-accent);
+            border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-serif);
+            font-weight: 700; font-size: 0.95rem;
+            color: var(--color-accent);
+            letter-spacing: -0.5px;
+        }
+        .logo-text {
+            font-family: var(--font-sans);
+            font-size: 0.85rem; font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--color-text);
+        }
+        .logo-text span {
+            display: block;
+            font-size: 0.62rem; font-weight: 400;
+            letter-spacing: 0.5px;
+            color: var(--color-text-secondary);
+            text-transform: none;
+            margin-top: 1px;
+        }
+
+        .nav-links {
+            display: flex; align-items: center;
+            gap: 0.25rem; list-style: none;
+        }
+        .nav-links > li { position: relative; }
+        .nav-links > li > a {
+            font-size: 0.82rem; font-weight: 500;
+            color: var(--color-text-secondary);
+            padding: 0.5rem 0.9rem;
+            border-radius: 6px;
+            transition: var(--transition);
+            display: flex; align-items: center; gap: 4px;
+        }
+        .nav-links > li > a:hover { color: var(--color-text); background: rgba(0,0,0,0.03); }
+        .nav-links > li > a .arrow { font-size: 0.6rem; opacity: 0.5; }
+
+        .dropdown {
+            position: absolute; top: calc(100% + 8px); left: 0;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 10px; padding: 0.5rem;
+            min-width: 220px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+            opacity: 0; transform: translateY(-4px);
+            pointer-events: none; transition: var(--transition);
+            z-index: 100;
+        }
+        .nav-links > li:hover .dropdown {
+            opacity: 1; transform: translateY(0); pointer-events: all;
+        }
+        .dropdown a {
+            display: block; padding: 0.55rem 0.9rem;
+            font-size: 0.82rem; color: var(--color-text-secondary);
+            border-radius: 6px; transition: var(--transition);
+        }
+        .dropdown a:hover { background: rgba(26,58,92,0.06); color: var(--color-accent); }
+
+        .menu-toggle {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; background: none; border: none; padding: 4px;
+        }
+        .menu-toggle span {
+            width: 22px; height: 1.5px; background: var(--color-text);
+            border-radius: 2px; transition: var(--transition);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            padding: 8rem 2rem 5rem;
+            position: relative;
+            background: linear-gradient(175deg, var(--color-dark) 0%, #0f1b2d 45%, #162942 100%);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px; pointer-events: none;
+        }
+        .hero-glow {
+            position: absolute; width: 600px; height: 600px;
+            border-radius: 50%; filter: blur(120px);
+            opacity: 0.12; pointer-events: none;
+        }
+        .hero-glow-1 { top: -200px; right: -100px; background: #4a90d9; }
+        .hero-glow-2 { bottom: -200px; left: -100px; background: #7c3aed; opacity: 0.08; }
+
+        .hero-content {
+            max-width: 800px; text-align: center;
+            position: relative; z-index: 1;
+        }
+        .hero-label {
+            display: inline-block; font-size: 0.7rem;
+            letter-spacing: 3px; text-transform: uppercase;
+            color: rgba(255,255,255,0.45); margin-bottom: 2rem; font-weight: 500;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeUp 0.8s ease forwards 0.2s;
+        }
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2.4rem, 5vw, 3.6rem);
+            font-weight: 500; line-height: 1.2;
+            letter-spacing: -0.5px; color: #fff; margin-bottom: 1.5rem;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeUp 0.8s ease forwards 0.4s;
+        }
+        .hero p {
+            font-size: 1.05rem; color: rgba(255,255,255,0.55);
+            max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.8;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeUp 0.8s ease forwards 0.6s;
+        }
+        .hero-buttons {
+            display: flex; align-items: center; justify-content: center; gap: 1rem;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeUp 0.8s ease forwards 0.8s;
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.75rem 1.8rem; border-radius: 6px;
+            font-size: 0.85rem; font-weight: 500;
+            font-family: var(--font-sans); cursor: pointer;
+            transition: var(--transition); border: none; letter-spacing: 0.3px;
+        }
+        .btn-light {
+            background: rgba(255,255,255,0.1); color: #fff;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .btn-light:hover { background: rgba(255,255,255,0.18); }
+        .btn-accent { background: var(--color-accent-light); color: #fff; }
+        .btn-accent:hover { background: var(--color-accent); transform: translateY(-1px); }
+        .btn-outline {
+            background: transparent; color: var(--color-accent);
+            border: 1.5px solid var(--color-border);
+        }
+        .btn-outline:hover { border-color: var(--color-accent); transform: translateY(-1px); }
+
+        /* ===== SECTIONS ===== */
+        section { padding: 5rem 2rem; }
+        .section-inner { max-width: var(--max-width); margin: 0 auto; }
+        .section-header { margin-bottom: 3.5rem; }
+        .section-label {
+            display: inline-block; font-size: 0.68rem;
+            text-transform: uppercase; letter-spacing: 2.5px;
+            color: var(--color-accent); font-weight: 600; margin-bottom: 0.75rem;
+        }
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            font-weight: 500; letter-spacing: -0.5px;
+            line-height: 1.25; color: var(--color-text); margin-bottom: 0.75rem;
+        }
+        .section-subtitle {
+            font-size: 0.95rem; color: var(--color-text-secondary);
+            max-width: 580px; line-height: 1.8;
+        }
+
+        /* Intro bar */
+        .intro-bar { background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+        .intro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+        .intro-item h3 {
+            font-family: var(--font-serif); font-size: 1.25rem;
+            font-weight: 500; margin-bottom: 0.6rem;
+        }
+        .intro-item p { font-size: 0.88rem; color: var(--color-text-secondary); line-height: 1.75; }
+        .intro-item::before {
+            content: ''; display: block; width: 32px; height: 2px;
+            background: var(--color-accent); margin-bottom: 1.5rem; opacity: 0.5;
+        }
+
+        /* Page sections */
+        .page-section { border-bottom: 1px solid var(--color-border-light); }
+        .page-section:nth-child(even) { background: var(--color-surface); }
+        .content-block { max-width: 720px; }
+        .content-block p {
+            font-size: 0.95rem; color: var(--color-text-secondary);
+            line-height: 1.85; margin-bottom: 1.2rem;
+        }
+        .content-block p:last-child { margin-bottom: 0; }
+
+        /* Principles */
+        .principles-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem; margin-top: 2.5rem;
+        }
+        .principle-card {
+            padding: 2rem; border: 1px solid var(--color-border);
+            border-radius: 10px; background: var(--color-surface);
+            transition: var(--transition);
+        }
+        .principle-card:hover { border-color: var(--color-accent); box-shadow: 0 4px 20px rgba(26,58,92,0.06); }
+        .principle-number {
+            font-family: var(--font-serif); font-size: 1.6rem;
+            font-weight: 500; color: var(--color-accent);
+            opacity: 0.3; margin-bottom: 0.75rem;
+        }
+        .principle-card h3 { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .principle-card p { font-size: 0.88rem; color: var(--color-text-secondary); line-height: 1.7; }
+
+        /* Governance */
+        .governance-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 4rem; align-items: start; margin-top: 2rem;
+        }
+        .governance-text p {
+            font-size: 0.95rem; color: var(--color-text-secondary);
+            line-height: 1.85; margin-bottom: 1.2rem;
+        }
+        .governance-sidebar {
+            background: var(--color-surface); border: 1px solid var(--color-border);
+            border-radius: 12px; padding: 2.5rem;
+        }
+        .governance-sidebar h4 { font-family: var(--font-serif); font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .gov-item { padding: 1rem 0; border-bottom: 1px solid var(--color-border-light); }
+        .gov-item:last-child { border-bottom: none; }
+        .gov-item h5 { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .gov-item p { font-size: 0.8rem; color: var(--color-text-light); line-height: 1.6; }
+
+        /* Research */
+        .research-areas {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem; margin-top: 2.5rem;
+        }
+        .research-card {
+            padding: 2rem 1.75rem; background: var(--color-surface);
+            border: 1px solid var(--color-border); border-radius: 10px;
+            transition: var(--transition);
+        }
+        .research-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.05); }
+        .research-icon {
+            width: 44px; height: 44px; border-radius: 8px;
+            background: rgba(26,58,92,0.06);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1.25rem; color: var(--color-accent);
+        }
+        .research-icon svg { width: 20px; height: 20px; }
+        .research-card h3 { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .research-card p { font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.7; }
+
+        /* Publications */
+        .pub-notice {
+            background: var(--color-surface); border: 1px solid var(--color-border);
+            border-radius: 12px; padding: 3rem; text-align: center; margin-top: 2rem;
+        }
+        .pub-notice svg { width: 40px; height: 40px; color: var(--color-text-light); margin-bottom: 1rem; opacity: 0.4; }
+        .pub-notice h3 { font-family: var(--font-serif); font-size: 1.15rem; margin-bottom: 0.5rem; }
+        .pub-notice p { font-size: 0.88rem; color: var(--color-text-light); max-width: 450px; margin: 0 auto; line-height: 1.7; }
+
+        /* Timeline */
+        .timeline { margin-top: 2.5rem; position: relative; padding-left: 2.5rem; }
+        .timeline::before {
+            content: ''; position: absolute;
+            left: 7px; top: 8px; bottom: 8px;
+            width: 1px; background: var(--color-border);
+        }
+        .timeline-item { position: relative; padding-bottom: 2rem; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-item::before {
+            content: ''; position: absolute;
+            left: -2.5rem; top: 8px;
+            width: 15px; height: 15px; border-radius: 50%;
+            border: 2px solid var(--color-accent); background: var(--color-bg);
+        }
+        .timeline-item.active::before { background: var(--color-accent); }
+        .timeline-item h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .timeline-label {
+            font-size: 0.7rem; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--color-accent);
+            font-weight: 600; margin-bottom: 0.4rem;
+        }
+        .timeline-item p { font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.7; }
+
+        /* CTA */
+        .cta-section { background: var(--color-dark); color: #fff; text-align: center; }
+        .cta-section .section-title { color: #fff; }
+        .cta-section p {
+            color: rgba(255,255,255,0.5); font-size: 0.95rem;
+            max-width: 500px; margin: 0 auto 2rem; line-height: 1.8;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-dark); color: rgba(255,255,255,0.4);
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .footer-inner { max-width: var(--max-width); margin: 0 auto; padding: 3.5rem 2rem 2.5rem; }
+        .footer-top {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem; padding-bottom: 2.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .footer-brand .logo-text { color: #fff; margin-bottom: 1rem; }
+        .footer-brand .logo-text span { color: rgba(255,255,255,0.4); }
+        .footer-brand p { font-size: 0.82rem; line-height: 1.7; color: rgba(255,255,255,0.35); max-width: 280px; }
+        .footer-col h4 {
+            font-size: 0.72rem; text-transform: uppercase;
+            letter-spacing: 1.5px; color: rgba(255,255,255,0.5);
+            margin-bottom: 1.2rem; font-weight: 600;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 0.6rem; }
+        .footer-col a { font-size: 0.82rem; color: rgba(255,255,255,0.35); transition: color var(--transition); }
+        .footer-col a:hover { color: rgba(255,255,255,0.8); }
+        .footer-bottom {
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 2rem; font-size: 0.75rem;
+        }
+
+        /* Animations */
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        .reveal {
+            opacity: 0; transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .menu-toggle { display: flex; }
+            .nav-links {
+                position: fixed; top: 68px; left: 0; width: 100%;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column; padding: 1.5rem 2rem; gap: 0.5rem;
+                border-bottom: 1px solid var(--color-border);
+                transform: translateY(-110%); opacity: 0;
+                pointer-events: none; transition: var(--transition);
+                max-height: calc(100vh - 68px); overflow-y: auto;
+            }
+            .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: all; }
+            .dropdown {
+                position: static; box-shadow: none; border: none;
+                opacity: 1; transform: none; pointer-events: all;
+                padding: 0 0 0 1rem; display: none;
+            }
+            .nav-links > li:hover .dropdown,
+            .nav-links > li.open-mobile .dropdown { display: block; }
+            .hero { padding: 7rem 1.5rem 3rem; min-height: auto; }
+            .hero-buttons { flex-direction: column; width: 100%; }
+            .hero-buttons .btn { width: 100%; justify-content: center; }
+            .intro-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .principles-grid { grid-template-columns: 1fr; }
+            .governance-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .research-areas { grid-template-columns: 1fr; }
+            .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+        }
+        @media (max-width: 600px) {
+            .footer-top { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+        <a href="#home" class="logo">
+            <div class="logo-mark">QGI</div>
+            <div class="logo-text">
+                QGI Quantum Systems
+                <span>Scientific Research Institute</span>
+            </div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li>
+                <a href="#instituto">Instituto <span class="arrow">&#9662;</span></a>
+                <div class="dropdown">
+                    <a href="#sobre">Sobre</a>
+                    <a href="#missao">Missão</a>
+                    <a href="#visao">Visão</a>
+                    <a href="#principios">Princípios</a>
+                    <a href="#governanca">Governança</a>
+                </div>
+            </li>
+            <li>
+                <a href="#pesquisa">Pesquisa <span class="arrow">&#9662;</span></a>
+                <div class="dropdown">
+                    <a href="#areas-pesquisa">Áreas de Pesquisa</a>
+                    <a href="#estrutura-pesquisa">Estrutura de Pesquisa</a>
+                    <a href="#programas">Programas Científicos</a>
+                </div>
+            </li>
+            <li><a href="#publicacoes">Publicações</a></li>
+            <li><a href="#colaboracoes">Colaborações</a></li>
+            <li><a href="#contato">Contato</a></li>
+        </ul>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="hero-content">
+        <div class="hero-label">Instituto independente de pesquisa científica</div>
+        <h1>Investigação científica nas fronteiras da informação, gravidade e sistemas complexos</h1>
+        <p>A QGI Quantum Systems é uma iniciativa independente dedicada ao desenvolvimento de pesquisa interdisciplinar de longo prazo em ciência fundamental, com foco na compreensão e modelagem de sistemas informacionais e complexos.</p>
+        <div class="hero-buttons">
+            <a href="#areas-pesquisa" class="btn btn-accent">Áreas de Pesquisa</a>
+            <a href="#sobre" class="btn btn-light">Conheça o Instituto</a>
+        </div>
+    </div>
+</section>
+
+<!-- DESTAQUES -->
+<section class="intro-bar" id="instituto">
+    <div class="section-inner">
+        <div class="intro-grid">
+            <div class="intro-item reveal">
+                <h3>Ciência Fundamental</h3>
+                <p>Investigação orientada por questões fundamentais da física, da informação e dos sistemas complexos.</p>
+            </div>
+            <div class="intro-item reveal">
+                <h3>Interdisciplinaridade</h3>
+                <p>Integração entre física teórica, ciência da informação, matemática e modelagem computacional.</p>
+            </div>
+            <div class="intro-item reveal">
+                <h3>Pesquisa de Longo Prazo</h3>
+                <p>Valorização de investigações científicas que exigem exploração conceitual profunda e abordagens não convencionais.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SOBRE -->
+<section class="page-section" id="sobre">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">O Instituto</span>
+            <h2 class="section-title">Sobre a QGI Quantum Systems</h2>
+        </div>
+        <div class="content-block reveal">
+            <p>A QGI Quantum Systems é uma iniciativa independente de pesquisa científica dedicada ao desenvolvimento e à exploração de novas abordagens em ciência fundamental.</p>
+            <p>O instituto atua na interseção entre física teórica, ciência da informação e sistemas complexos, com o objetivo de investigar estruturas fundamentais da natureza e desenvolver novos modelos científicos capazes de ampliar a compreensão contemporânea desses sistemas.</p>
+            <p>A iniciativa parte da convicção de que avanços científicos significativos exigem ambientes de pesquisa abertos à investigação conceitual profunda e à exploração de novas abordagens teóricas, matemáticas e tecnológicas.</p>
+        </div>
+    </div>
+</section>
+
+<!-- MISSÃO -->
+<section class="page-section" id="missao">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Propósito</span>
+            <h2 class="section-title">Missão</h2>
+        </div>
+        <div class="content-block reveal">
+            <p>A missão da QGI Quantum Systems é conduzir pesquisa científica interdisciplinar voltada à compreensão e modelagem de sistemas informacionais, físicos e complexos.</p>
+            <p>O instituto busca contribuir para o avanço do conhecimento científico e para o desenvolvimento de novas abordagens teóricas e matemáticas capazes de ampliar as fronteiras da investigação científica contemporânea.</p>
+        </div>
+    </div>
+</section>
+
+<!-- VISÃO -->
+<section class="page-section" id="visao">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Futuro</span>
+            <h2 class="section-title">Visão</h2>
+        </div>
+        <div class="content-block reveal">
+            <p>A QGI Quantum Systems busca consolidar-se como um instituto independente de pesquisa dedicado à investigação científica de longo prazo em ciência fundamental, informação e sistemas complexos.</p>
+            <p>A iniciativa pretende promover ambientes de pesquisa abertos à colaboração científica e ao desenvolvimento de novas abordagens capazes de conectar diferentes áreas do conhecimento.</p>
+        </div>
+    </div>
+</section>
+
+<!-- PRINCÍPIOS -->
+<section class="page-section" id="principios">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Valores</span>
+            <h2 class="section-title">Princípios Institucionais</h2>
+            <p class="section-subtitle">A atuação científica do instituto é orientada por princípios fundamentais que guiam todas as atividades de pesquisa.</p>
+        </div>
+        <div class="principles-grid">
+            <div class="principle-card reveal">
+                <div class="principle-number">01</div>
+                <h3>Rigor Científico</h3>
+                <p>Compromisso com investigação científica conduzida de forma rigorosa e transparente, respeitando os mais altos padrões metodológicos.</p>
+            </div>
+            <div class="principle-card reveal">
+                <div class="principle-number">02</div>
+                <h3>Interdisciplinaridade</h3>
+                <p>Integração entre diferentes áreas do conhecimento científico para gerar novas perspectivas e abordagens.</p>
+            </div>
+            <div class="principle-card reveal">
+                <div class="principle-number">03</div>
+                <h3>Pesquisa de Longo Prazo</h3>
+                <p>Valorização de investigações científicas que exigem exploração conceitual profunda e não se limitam a resultados imediatos.</p>
+            </div>
+            <div class="principle-card reveal">
+                <div class="principle-number">04</div>
+                <h3>Responsabilidade Científica</h3>
+                <p>Desenvolvimento de pesquisa orientada por princípios éticos e responsabilidade social.</p>
+            </div>
+            <div class="principle-card reveal">
+                <div class="principle-number">05</div>
+                <h3>Colaboração Aberta</h3>
+                <p>Estímulo à cooperação científica com pesquisadores e instituições ao redor do mundo.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- GOVERNANÇA -->
+<section class="page-section" id="governanca">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Estrutura</span>
+            <h2 class="section-title">Governança</h2>
+        </div>
+        <div class="governance-grid">
+            <div class="governance-text reveal">
+                <p>A QGI Quantum Systems opera como uma iniciativa independente de pesquisa científica orientada por princípios de transparência, integridade científica e responsabilidade institucional.</p>
+                <p>A estrutura de governança do instituto será expandida progressivamente conforme o desenvolvimento das atividades científicas e o estabelecimento de novos programas de pesquisa.</p>
+                <p>A iniciativa adota o entendimento de que o desenvolvimento do conhecimento científico e tecnológico deve contribuir para o benefício da sociedade.</p>
+            </div>
+            <div class="governance-sidebar reveal">
+                <h4>Pilares da Governança</h4>
+                <div class="gov-item">
+                    <h5>Transparência</h5>
+                    <p>Publicação de relatórios de atividades e prestação de contas institucional.</p>
+                </div>
+                <div class="gov-item">
+                    <h5>Reinvestimento em Pesquisa</h5>
+                    <p>Alocação prioritária de recursos para atividades de investigação científica.</p>
+                </div>
+                <div class="gov-item">
+                    <h5>Coordenação Científica</h5>
+                    <p>Gestão orientada por mérito e impacto científico.</p>
+                </div>
+                <div class="gov-item">
+                    <h5>Responsabilidade Social</h5>
+                    <p>Compromisso com educação, acesso à informação e justiça informacional.</p>
+                </div>
+                <div class="gov-item">
+                    <h5>Missão Permanente</h5>
+                    <p>O propósito central do instituto é irrevogável e orientado pelo bem coletivo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ÁREAS DE PESQUISA -->
+<section class="page-section" id="areas-pesquisa">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Investigação</span>
+            <h2 class="section-title" id="pesquisa">Áreas de Pesquisa</h2>
+            <p class="section-subtitle">Programas de investigação interdisciplinar voltados à exploração de questões fundamentais na fronteira do conhecimento.</p>
+        </div>
+        <div class="research-areas">
+            <div class="research-card reveal">
+                <div class="research-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
+                </div>
+                <h3>Física Fundamental</h3>
+                <p>Investigação teórica na interseção entre mecânica quântica, gravitação e ciência da informação.</p>
+            </div>
+            <div class="research-card reveal">
+                <div class="research-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
+                </div>
+                <h3>Sistemas Complexos</h3>
+                <p>Modelagem e análise de sistemas complexos adaptativos, incluindo fenômenos de emergência, auto-organização e dinâmicas não-lineares.</p>
+            </div>
+            <div class="research-card reveal">
+                <div class="research-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"/></svg>
+                </div>
+                <h3>Ciência da Informação</h3>
+                <p>Estudo das propriedades fundamentais da informação como elemento físico e estrutural de sistemas naturais e computacionais.</p>
+            </div>
+            <div class="research-card reveal">
+                <div class="research-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z"/></svg>
+                </div>
+                <h3>Computação e Modelagem</h3>
+                <p>Desenvolvimento de simulações computacionais, modelagem matemática e ferramentas de investigação científica.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ESTRUTURA DE PESQUISA -->
+<section class="page-section" id="estrutura-pesquisa">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Organização</span>
+            <h2 class="section-title">Estrutura de Pesquisa</h2>
+        </div>
+        <div class="content-block reveal">
+            <p>As atividades científicas da QGI Quantum Systems são organizadas em programas de investigação interdisciplinar voltados à exploração de diferentes aspectos da ciência da informação, da física fundamental e dos sistemas complexos.</p>
+            <p>Esses programas integram investigação teórica, modelagem matemática e experimentação computacional. Novas iniciativas de pesquisa serão incorporadas conforme o desenvolvimento das atividades científicas do instituto.</p>
+        </div>
+    </div>
+</section>
+
+<!-- PROGRAMAS CIENTÍFICOS -->
+<section class="page-section" id="programas">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Programas</span>
+            <h2 class="section-title">Programas Científicos</h2>
+        </div>
+        <div class="content-block reveal">
+            <p>O programa científico central da QGI Quantum Systems concentra-se no desenvolvimento e investigação do framework Quântico-Gravitacional-Informacional (QGI).</p>
+            <p>Esse programa busca explorar abordagens que tratam as leis físicas como propriedades emergentes de estruturas informacionais fundamentais.</p>
+            <p>As investigações incluem estudos sobre unificação de constantes físicas, transições dimensionais dependentes da escala de energia e implicações para problemas abertos da física contemporânea.</p>
+            <p>Novos programas de pesquisa serão incorporados conforme a evolução das atividades científicas do instituto.</p>
+        </div>
+    </div>
+</section>
+
+<!-- PUBLICAÇÕES -->
+<section class="page-section" id="publicacoes">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Produção Científica</span>
+            <h2 class="section-title">Publicações</h2>
+        </div>
+        <div class="pub-notice reveal">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/></svg>
+            <h3>Em preparação</h3>
+            <p>As publicações científicas da QGI Quantum Systems estão atualmente em fase de elaboração. Esta seção será atualizada conforme os trabalhos forem submetidos e publicados.</p>
+        </div>
+    </div>
+</section>
+
+<!-- COLABORAÇÕES -->
+<section class="page-section" id="colaboracoes">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Parcerias</span>
+            <h2 class="section-title">Colaborações</h2>
+        </div>
+        <div class="content-block reveal">
+            <p>A QGI Quantum Systems está aberta a colaborações com pesquisadores, grupos de pesquisa e instituições científicas interessados em investigações interdisciplinares em ciência fundamental, informação e sistemas complexos.</p>
+            <p>Pesquisadores interessados podem entrar em contato com o instituto para discutir possíveis iniciativas de colaboração científica.</p>
+            <br>
+            <a href="#contato" class="btn btn-outline">Iniciar Conversa</a>
+        </div>
+    </div>
+</section>
+
+<!-- DESENVOLVIMENTO INSTITUCIONAL -->
+<section class="page-section" id="desenvolvimento">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Trajetória</span>
+            <h2 class="section-title">Desenvolvimento Institucional</h2>
+            <p class="section-subtitle">A QGI Quantum Systems encontra-se em fase inicial de desenvolvimento institucional.</p>
+        </div>
+        <div class="content-block reveal">
+            <p>Nos próximos anos, o instituto pretende expandir suas atividades de pesquisa, desenvolver novos programas científicos e estabelecer colaborações com a comunidade acadêmica. O crescimento institucional será conduzido de forma gradual, priorizando qualidade científica e consistência das atividades de pesquisa.</p>
+        </div>
+        <div class="timeline reveal">
+            <div class="timeline-item active">
+                <div class="timeline-label">Fase Atual</div>
+                <h4>Fundação e Estruturação</h4>
+                <p>Estabelecimento da identidade institucional, definição dos programas de pesquisa iniciais e desenvolvimento do framework teórico central.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-label">Próxima Fase</div>
+                <h4>Consolidação Científica</h4>
+                <p>Publicação dos primeiros trabalhos científicos, estabelecimento de colaborações e ampliação das atividades de pesquisa.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-label">Visão de Longo Prazo</div>
+                <h4>Expansão e Impacto</h4>
+                <p>Desenvolvimento de programas científicos amplos, formação de equipes de pesquisa e contribuições para a comunidade científica internacional.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTATO -->
+<section class="cta-section" id="contato">
+    <div class="section-inner">
+        <span class="section-label" style="color: rgba(255,255,255,0.4);">Contato</span>
+        <h2 class="section-title">Entre em Contato</h2>
+        <p>Para questões institucionais ou propostas de colaboração científica.</p>
+        <a href="mailto:contato@qgisystems.org" class="btn btn-accent" style="margin-top: 0.5rem;">
+            contato@qgisystems.org
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="logo-text" style="margin-bottom: 1rem;">
+                    Instituto de Pesquisa QGI
+                    <span>Instituto independente dedicado à pesquisa científica interdisciplinar.</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Instituto</h4>
+                <ul>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#missao">Missão</a></li>
+                    <li><a href="#visao">Visão</a></li>
+                    <li><a href="#principios">Princípios</a></li>
+                    <li><a href="#governanca">Governança</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Pesquisa</h4>
+                <ul>
+                    <li><a href="#areas-pesquisa">Áreas de Pesquisa</a></li>
+                    <li><a href="#estrutura-pesquisa">Estrutura</a></li>
+                    <li><a href="#programas">Programas</a></li>
+                    <li><a href="#publicacoes">Publicações</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="#colaboracoes">Colaborações</a></li>
+                    <li><a href="mailto:contato@qgisystems.org">E-mail</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 QGI Quantum Systems</span>
+            <span>Instituto independente dedicado à pesquisa científica interdisciplinar</span>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+    // Mobile dropdown
+    document.querySelectorAll('.nav-links > li').forEach(li => {
+        const link = li.querySelector('a');
+        const dropdown = li.querySelector('.dropdown');
+        if (dropdown) {
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth <= 900) {
+                    e.preventDefault();
+                    li.classList.toggle('open-mobile');
+                }
+            });
+        }
+    });
+
+    // Close mobile on link click
+    document.querySelectorAll('.dropdown a').forEach(a => {
+        a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // Reveal on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#') return;
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
