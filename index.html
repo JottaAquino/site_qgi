@@ -162,6 +162,17 @@
         .hero-glow-1 { top: -200px; right: -100px; background: #4a90d9; }
         .hero-glow-2 { bottom: -200px; left: -100px; background: #7c3aed; opacity: 0.08; }
         .hero-glow-3 { top: 50%; left: 50%; transform: translate(-50%,-50%); width: 400px; height: 400px; background: radial-gradient(circle, rgba(74,144,217,0.08) 0%, transparent 70%); }
+        .hero-bg-art {
+            position: absolute; inset: 0; z-index: 0;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0.25; pointer-events: none;
+        }
+        .hero-bg-art img {
+            width: 90vh; height: 90vh; max-width: 900px; max-height: 900px;
+            object-fit: contain; filter: blur(1px);
+            animation: slowRotate 120s linear infinite;
+        }
+        @keyframes slowRotate { to { transform: rotate(360deg); } }
 
         .hero-content {
             max-width: 800px; text-align: center;
@@ -495,6 +506,52 @@
             pointer-events: none;
         }
 
+        /* Research & program visuals */
+        .research-visual, .program-visual {
+            margin: 2.5rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            background: #0a0f1a;
+            position: relative;
+        }
+        .research-visual img, .program-visual img {
+            width: 100%;
+            display: block;
+            opacity: 0.9;
+        }
+        .visual-caption {
+            display: block;
+            text-align: center;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+            font-style: italic;
+            font-family: var(--font-serif);
+            letter-spacing: 0.3px;
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+        }
+
+        /* CTA background art */
+        .cta-bg-art {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.12;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .cta-bg-art img {
+            width: 500px;
+            height: 500px;
+            object-fit: contain;
+            animation: slowRotate 90s linear infinite reverse;
+        }
+        .cta-section { position: relative; overflow: hidden; }
+
         /* Pub notice icon animation */
         .pub-notice svg {
             transition: var(--transition);
@@ -593,6 +650,9 @@
     <div class="hero-glow hero-glow-1"></div>
     <div class="hero-glow hero-glow-2"></div>
     <div class="hero-glow hero-glow-3"></div>
+    <div class="hero-bg-art">
+        <img src="img/hopf_fibration.png" alt="" loading="lazy">
+    </div>
     <div class="hero-content">
         <div class="hero-label">Instituto independente de pesquisa científica</div>
         <h1>Investigação científica nas fronteiras da informação, gravidade e sistemas complexos</h1>
@@ -753,6 +813,10 @@
             <h2 class="section-title" id="pesquisa">Áreas de Pesquisa</h2>
             <p class="section-subtitle">Programas de investigação interdisciplinar voltados à exploração de questões fundamentais na fronteira do conhecimento.</p>
         </div>
+        <div class="research-visual reveal">
+            <img src="img/spectral_pattern.png" alt="Padrão espectral QGI" loading="lazy">
+            <span class="visual-caption">Padrão de interferência do espectro fracionário — modos de winding {1, 3, 7}</span>
+        </div>
         <div class="research-areas">
             <div class="research-card reveal">
                 <div class="research-icon">
@@ -795,6 +859,10 @@
         </div>
         <div class="content-block reveal">
             <p>As atividades científicas são organizadas em programas de investigação interdisciplinar voltados à exploração de diferentes aspectos da ciência da informação, da física fundamental e dos sistemas complexos.</p>
+            <div class="program-visual">
+                <img src="img/connection_network.png" alt="Rede de derivações QGI" loading="lazy">
+                <span class="visual-caption">Rede de constantes derivadas a partir de uma única constante fundamental</span>
+            </div>
             <p>Esses programas integram investigação teórica, modelagem matemática e experimentação computacional. Novas iniciativas de pesquisa serão incorporadas conforme o desenvolvimento das atividades científicas do instituto.</p>
         </div>
     </div>
@@ -810,6 +878,10 @@
         <div class="content-block reveal">
             <p>O programa científico central concentra-se no desenvolvimento e investigação do framework Quântico-Gravitacional-Informacional (QGI).</p>
             <p>Esse programa busca explorar abordagens que tratam as leis físicas como propriedades emergentes de estruturas informacionais fundamentais.</p>
+            <div class="program-visual">
+                <img src="img/qgi_field_evolution.gif" alt="Evolução do campo informacional QGI" loading="lazy">
+                <span class="visual-caption">Evolução temporal do campo informacional no domínio [1, π]</span>
+            </div>
             <p>As investigações incluem estudos sobre unificação de constantes físicas, transições dimensionais dependentes da escala de energia e implicações para problemas abertos da física contemporânea.</p>
             <p>Novos programas de pesquisa serão incorporados conforme a evolução das atividades científicas do instituto.</p>
         </div>
@@ -880,7 +952,10 @@
 
 <!-- CONTATO -->
 <section class="cta-section" id="contato">
-    <div class="section-inner">
+    <div class="cta-bg-art">
+        <img src="img/domain_circular.png" alt="" loading="lazy">
+    </div>
+    <div class="section-inner" style="position:relative;z-index:1;">
         <span class="section-label" style="color: rgba(255,255,255,0.4);">Contato</span>
         <h2 class="section-title">Entre em Contato</h2>
         <p>Para questões institucionais ou propostas de colaboração científica.</p>
